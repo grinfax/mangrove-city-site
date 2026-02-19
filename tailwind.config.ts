@@ -14,6 +14,14 @@ export default {
     },
     extend: {
       colors: {
+        "mc-cyan": "hsl(var(--mc-cyan))",
+        "mc-cyan-dark": "hsl(var(--mc-cyan-dark))",
+        "mc-dark": "hsl(var(--mc-dark))",
+        "mc-maroon": "hsl(var(--mc-maroon))",
+        "mc-pink": "hsl(var(--mc-pink))",
+        "mc-cream": "hsl(var(--mc-cream))",
+        "mc-cream-dark": "hsl(var(--mc-cream-dark))",
+        "mc-navy": "hsl(var(--mc-navy))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
