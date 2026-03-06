@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mangrove City VR</title>
+  <meta name="description" content="&quot;Mangrove City&quot; is a VR experience designed for middle school students to explore the crucial role of mangrove forests in protecting coastal communities and mitigating climate change." />
+  <meta property="og:title" content="Mangrove City VR" />
+  <meta property="og:description" content="&quot;Mangrove City&quot; is a VR experience designed for middle school students to explore the crucial role of mangrove forests in protecting coastal communities and mitigating climate change." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mangrovecity.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Mangrove City VR" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Variables ── */
+    :root {
+      --cyan:       #00e5cc;
+      --pink:       #ff1493;
+      --navy:       #0d1520;
+      --maroon:     #3b1010;
+      --cream:      #ede4d4;
+      --cream-dark: #d9cfc0;
+      --dark:       #1a0808;
+      --white:      #ffffff;
+      --text-muted: #666;
+    }
+
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      color: var(--dark);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── Shared typography ── */
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+    }
+    .section-title.cyan { color: var(--cyan); }
+    .section-title.navy { color: var(--navy); }
+    .section-title.dark { color: var(--dark); }
+
+    .underline {
+      width: 56px; height: 3px;
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+    }
+    .underline.cyan { background: var(--cyan); }
+    .underline.navy { background: var(--navy); }
+    .underline.dark { background: var(--dark); }
+
+    .body-text { font-size: 1.02rem; line-height: 1.78; color: var(--dark); }
+    .body-text.navy { color: var(--navy); opacity: 0.85; }
+
+    /* ── Container ── */
+    .container { max-width: 1020px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Two-column layout ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+    .two-col--reverse .two-col__text { order: 1; }
+    .two-col--reverse .two-col__media { order: 0; }
+
+    /* ── NAV ── */
+    #navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      transition: box-shadow 0.3s;
+    }
+    #navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.45); }
+
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-links { list-style: none; display: flex; gap: 2.5rem; }
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 580px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #061006;
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 1rem;
+      animation: heroFadeIn 1.1s ease both;
+    }
+    .hero-logo {
+      max-width: min(800px, 90vw);
+      margin: 0 auto;
+      filter: drop-shadow(0 4px 32px rgba(0,0,0,0.5));
+    }
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.45);
+      font-size: 1.4rem;
+      animation: bounce 2.2s infinite;
+      z-index: 2;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(9px); }
+    }
+
+    /* ── VIDEO EMBED ── */
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    }
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0; width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ── ABOUT ── */
+    .about { background: var(--white); padding: 90px 2rem; }
+    .about .section-title { margin-bottom: 1.2rem; }
+
+    /* ── CURRICULUM ── */
+    .curriculum { background: var(--maroon); padding: 90px 2rem; }
+    .curriculum .body-text { color: rgba(255,255,255,0.8); margin-bottom: 0.5rem; }
+
+    .subsection-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin: 2.2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .resource-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 0.5rem; }
+    .resource-list li { display: flex; align-items: baseline; gap: 0.5rem; color: rgba(255,255,255,0.75); font-size: 1rem; }
+    .resource-list li::before { content: '▸'; color: var(--cyan); font-size: 0.75rem; flex-shrink: 0; }
+    .resource-list a { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
+    .resource-list a:hover { opacity: 0.7; }
+
+    .extension-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.5rem; }
+    .extension-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 1.3rem 1.4rem;
+      transition: background 0.2s;
+    }
+    .extension-card:hover { background: rgba(255,255,255,0.11); }
+    .ext-num { display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.8rem; color: var(--cyan); line-height: 1; margin-bottom: 0.15rem; }
+    .extension-card strong { display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); margin-bottom: 0.2rem; }
+    .ext-subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 0.7rem; }
+    .ext-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .ext-links a { color: var(--cyan); text-decoration: underline; text-underline-offset: 2px; font-size: 0.88rem; transition: opacity 0.2s; }
+    .ext-links a:hover { opacity: 0.7; }
+
+    .curriculum-extras { margin-top: 1rem; }
+    .curriculum-footer { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.15); }
+    .curriculum-contact { color: rgba(255,255,255,0.65); font-size: 0.95rem; }
+    .curriculum-contact a { color: var(--cyan); text-decoration: underline; }
+
+    /* ── PLAYTHROUGH ── */
+    .playthrough { background: var(--cream); padding: 90px 2rem; }
+    .how-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); margin: 1.5rem 0 0.6rem; }
+    .link-dark { color: var(--navy); font-weight: 700; text-decoration: underline; }
+
+    /* ── AWARDS ── */
+    .awards { background: var(--cream-dark); padding: 90px 2rem; }
+    .awards-grid { display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-top: 1rem; }
+    .award-card { display: flex; align-items: center; justify-content: center; transition: transform 0.25s; }
+    .award-card:hover { transform: scale(1.04); }
+    .award-card img { max-height: 180px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.12)); }
+
+    /* ── TEAM ── */
+    .team { background: var(--cream); padding: 90px 2rem; }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem 2rem; margin-top: 0.5rem; }
+    .team-category { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dark); margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(0,0,0,0.15); }
+    .team-member { margin-bottom: 0.65rem; }
+    .team-member strong { display: block; font-size: 0.93rem; font-weight: 700; color: var(--dark); }
+    .team-member span { display: block; font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--navy); padding: 2.8rem 2rem; text-align: center; }
+    .footer-logos { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .footer-logo-img { max-height: 60px; width: auto; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.85; }
+    .footer-contact { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem; }
+    .footer-contact a { color: var(--cyan); text-decoration: underline; font-weight: 600; }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 800px) {
+      .two-col, .two-col--reverse { grid-template-columns: 1fr; gap: 2rem; }
+      .two-col--reverse .two-col__text { order: 0; }
+      .two-col--reverse .two-col__media { order: 1; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .extension-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 56px; left: 0; right: 0; background: var(--navy); padding: 0.5rem 0; }
+      .nav-links.open { display: flex; }
+      .nav-links li a { display: block; padding: 0.8rem 2rem; font-size: 1rem; }
+      .nav-toggle { display: flex; }
+      .awards-grid { gap: 2rem; }
+      .award-card img { max-height: 130px; }
+    }
+    @media (max-width: 480px) {
+      .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav id="navbar">
+    <a href="#home" class="nav-logo">MANGROVE CITY VR</a>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#curriculum">Curriculum</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#team">Team</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="home" class="hero">
+    <video class="hero-video" autoplay muted loop playsinline
+      poster="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6564ef58fd62fb01f31649b8_PXL_20230805_204852982-poster-00001.jpg">
+      <source src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6564ef58fd62fb01f31649b8_PXL_20230805_204852982-transcode.mp4" type="video/mp4" />
+      <source src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6564ef58fd62fb01f31649b8_PXL_20230805_204852982-transcode.webm" type="video/webm" />
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img
+        src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6545016b40e8723d782a7abd_mangrove_city_splash_web.png"
+        srcset="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6545016b40e8723d782a7abd_mangrove_city_splash_web-p-500.png 500w,
+                https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6545016b40e8723d782a7abd_mangrove_city_splash_web-p-800.png 800w,
+                https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6545016b40e8723d782a7abd_mangrove_city_splash_web.png 1080w"
+        sizes="(max-width: 991px) 100vw, 800px"
+        alt="Welcome to Mangrove City"
+        class="hero-logo"
+      />
+    </div>
+    <div class="hero-scroll-hint" aria-hidden="true">↓</div>
+  </section>
+
+  <main>
+
+    <!-- ── ABOUT ── -->
+    <section class="about">
+      <div class="container">
+        <div class="two-col">
+          <div class="two-col__text reveal">
+            <h1 class="section-title dark">Mangrove City VR</h1>
+            <p class="body-text">
+              Mangrove City is an immersive journey into the heart of mangrove ecosystems. Join us in
+              exploring the secrets of these vital coastal forests and their role in combating climate
+              change. Dive into interactive experiences, witness nature's resilience, and envision a
+              future where cities coexist harmoniously with mangroves. Perfect for middle schoolers,
+              this free VR experience and accompanying educational materials inspire the environmental
+              stewards of tomorrow. Embark on an adventure that blends education, technology, and a
+              vision for a sustainable world.
+            </p>
+          </div>
+          <div class="two-col__media reveal">
+            <div class="video-wrap">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/X9ElhTf-EsQ?rel=0&controls=1&autoplay=0&mute=0"
+                title="Mangrove City VR Trailer"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CURRICULUM ── -->
+    <section id="curriculum" class="curriculum">
+      <div class="container">
+        <h2 class="section-title cyan reveal">5-8TH Grade Science Curriculum</h2>
+        <div class="underline cyan reveal"></div>
+        <p class="body-text reveal">
+          The Mangrove City Curriculum offers a free, detailed workshop designed for 1-2 class periods,
+          along with the 'Beyond Mangrove City' extension guide. This guide provides additional lesson
+          plans to integrate "Mangrove City" into regular science classes. Both parts of the curriculum
+          feature editable slideshows, lesson procedures, curriculum standards, teacher topic guides,
+          student worksheets, and assessment recommendations.
+        </p>
+
+        <h3 class="subsection-title reveal">Welcome to Mangrove City — 1-2 Period Workshop</h3>
+        <ul class="resource-list reveal">
+          <li>Full Curriculum (<a href="https://docs.google.com/document/d/1Zg-9RrcrlTbWJjyykERTy47n437KPyjK/edit?usp=sharing&ouid=101640399844261071731&rtpof=true&sd=true" target="_blank" rel="noopener">docx</a>) (<a href="https://drive.google.com/file/d/1kHFEWro1ajQ8zQGwL69ZamTNTdE7vF0T/view?usp=sharing" target="_blank" rel="noopener">pdf</a>)</li>
+          <li><a href="https://drive.google.com/file/d/12cT-i76GF0x1jeuEnNU0zryeHjNsclRE/view?usp=sharing" target="_blank" rel="noopener">Teacher Guide</a></li>
+          <li><a href="https://docs.google.com/presentation/d/1g8XhaNmKcLyJrTzXT4Fdvc0wF--oWOIw/edit?usp=sharing&ouid=101640399844261071731&rtpof=true&sd=true" target="_blank" rel="noopener">Classroom Slideshow</a></li>
+          <li><a href="https://drive.google.com/file/d/17fqn4DbW5w7z0MO2HkkeJI7kRC0aFdGe/view?usp=sharing" target="_blank" rel="noopener">Student Worksheet</a></li>
+          <li><a href="https://drive.google.com/file/d/1rqJUu0jScIqM3_lW6Ugn6box7WCL8s6B/view?usp=sharing" target="_blank" rel="noopener">In-Class Discussion Guide</a></li>
+          <li><a href="https://drive.google.com/file/d/1CWTkZjpXZoHFt87el5oexk_460GNpmPN/view?usp=sharing" target="_blank" rel="noopener">Mangrove City Design Challenge Activity and Assessment</a></li>
+        </ul>
+
+        <h3 class="subsection-title reveal">Beyond Mangrove City — Extension Activities</h3>
+        <ul class="resource-list reveal">
+          <li><a href="https://drive.google.com/file/d/1p9XzXHSztAik3SNM52l4EsuQDj16sQoI/view?usp=sharing" target="_blank" rel="noopener">Guide — Read First</a></li>
+        </ul>
+
+        <div class="extension-grid reveal">
+          <div class="extension-card">
+            <span class="ext-num">1.</span>
+            <strong>Biomimicry Blitz</strong>
+            <p class="ext-subtitle">Unleashing Nature's Solutions for Climate Resilience</p>
+            <div class="ext-links">
+              <a href="https://drive.google.com/file/d/15TDBZcH7SePS7HNNkWYin21OeOh7O-gz/view?usp=sharing" target="_blank" rel="noopener">Activity Guide</a>
+              <a href="https://docs.google.com/presentation/d/1umDl8HL9tNiH0kbFh0ryaif4qwv5zO52/edit?usp=sharing&ouid=101640399844261071731&rtpof=true&sd=true" target="_blank" rel="noopener">Slideshow</a>
+            </div>
+          </div>
+          <div class="extension-card">
+            <span class="ext-num">2.</span>
+            <strong>Coastal Erosion</strong>
+            <p class="ext-subtitle">and the Role of Mangroves</p>
+            <div class="ext-links">
+              <a href="https://drive.google.com/file/d/1s4YuTdUsmg4S1iY6FG1wKelfKYlsXubE/view?usp=sharing" target="_blank" rel="noopener">Activity Guide</a>
+              <a href="https://docs.google.com/presentation/d/1wJhYkPj6jwPypxabKz_9fuhONYPmQd48/edit?usp=sharing&ouid=101640399844261071731&rtpof=true&sd=true" target="_blank" rel="noopener">Slideshow</a>
+            </div>
+          </div>
+          <div class="extension-card">
+            <span class="ext-num">3.</span>
+            <strong>Ecosystem Health</strong>
+            <p class="ext-subtitle">Designing Solutions for Ecosystem Health</p>
+            <div class="ext-links">
+              <a href="https://drive.google.com/file/d/161DpIrLUsFBpiGlcuEbzlZ0zBctj_Nnb/view?usp=sharing" target="_blank" rel="noopener">Activity Guide</a>
+              <a href="https://docs.google.com/presentation/d/1ySI7n8X3INvdOOuhHQsSrBbnOd3BvHE5/edit?usp=sharing&ouid=101640399844261071731&rtpof=true&sd=true" target="_blank" rel="noopener">Slideshow</a>
+            </div>
+          </div>
+          <div class="extension-card">
+            <span class="ext-num">4.</span>
+            <strong>Sustainable Agriculture</strong>
+            <p class="ext-subtitle">Building Our Classroom Aquaponics System</p>
+            <div class="ext-links">
+              <a href="https://drive.google.com/file/d/1diqGrVgxj-CbrYVO91kqsy4Xe38so82U/view?usp=sharing" target="_blank" rel="noopener">Activity Guide</a>
+              <a href="https://docs.google.com/presentation/d/1au_zH-5truBURaBqa-Eai2nbVVZeje68/edit?usp=sharing&ouid=101640399844261071731&rtpof=true&sd=true" target="_blank" rel="noopener">Slideshow</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="curriculum-extras reveal">
+          <h3 class="subsection-title">Additional Information</h3>
+          <ul class="resource-list">
+            <li><a href="https://drive.google.com/file/d/1vNBrDA3Us-hZ_nJSZgy3X_y07-X5-MJy/view?usp=sharing" target="_blank" rel="noopener">Web Resources</a></li>
+          </ul>
+          <h3 class="subsection-title" style="margin-top:1.5rem;">Download All Assets</h3>
+          <ul class="resource-list">
+            <li><a href="https://drive.google.com/file/d/1hbksNqfJZgJ6o2VQZTFGmxd4qfzzSQd1/view?usp=sharing" target="_blank" rel="noopener">Download all assets (50MB)</a></li>
+          </ul>
+        </div>
+
+        <div class="curriculum-footer reveal">
+          <p class="curriculum-contact">For feedback or questions on the curriculum, contact <a href="mailto:krende@unomaha.edu">Ren Mendoza</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PLAYTHROUGH ── -->
+    <section class="playthrough">
+      <div class="container">
+        <div class="two-col two-col--reverse">
+          <div class="two-col__text reveal">
+            <h2 class="section-title navy">Playthrough</h2>
+            <div class="underline navy"></div>
+            <p class="body-text navy">
+              Experience Mangrove City: This video showcases what participants will see through their
+              goggles during the experience, condensed for brevity.
+            </p>
+            <h3 class="how-title">So how do I experience it?</h3>
+            <p class="body-text navy">
+              Mangrove City is currently only available on the festival circuit, but will be released
+              shortly on Meta for the <strong>Meta Quest 2 and 3</strong>. Check back soon!
+            </p>
+            <p class="body-text navy" style="margin-top:1rem;">
+              Contact Kim Grinfeder at
+              <a href="mailto:grinfeder@miami.edu" class="link-dark">grinfeder@miami.edu</a>
+              if you want to exhibit it.
+            </p>
+          </div>
+          <div class="two-col__media reveal">
+            <div class="video-wrap">
+              <iframe
+                src="https://www.youtube.com/embed/k-C6qXuo12g?rel=0&controls=1&autoplay=0&mute=0"
+                title="Mangrove City VR Playthrough"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── AWARDS ── -->
+    <section id="awards" class="awards">
+      <div class="container">
+        <h2 class="section-title dark reveal">Awards</h2>
+        <div class="underline dark reveal"></div>
+        <div class="awards-grid reveal">
+          <div class="award-card">
+            <img src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/6564f2603a4cb7b5ea3caf25_awe.png" alt="AWE XR Prize Challenge: Winner — Educate Category" loading="lazy" />
+          </div>
+          <div class="award-card">
+            <img
+              src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/657a06ed04bf75e0648cb016_Gold%20winner_University%20of%20Miami_%20US%20%26%20Canada.png"
+              srcset="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/657a06ed04bf75e0648cb016_Gold%20winner_University%20of%20Miami_%20US%20%26%20Canada-p-500.png 500w,
+                      https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/657a06ed04bf75e0648cb016_Gold%20winner_University%20of%20Miami_%20US%20%26%20Canada.png 1080w"
+              sizes="150px"
+              alt="Reimagine Education Awards: Gold Winner — US &amp; Canada, University of Miami"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TEAM ── -->
+    <section id="team" class="team">
+      <div class="container">
+        <h2 class="section-title dark reveal">The Team</h2>
+        <div class="underline dark reveal"></div>
+        <div class="team-grid">
+          <div class="team-group reveal">
+            <h3 class="team-category">Producers</h3>
+            <div class="team-member"><strong>Kim Grinfeder</strong><span>Professor, University of Miami School of Communication</span></div>
+            <div class="team-member"><strong>Zeven Rodriguez</strong><span>Lecturer, University of Miami School of Communication</span></div>
+            <div class="team-member"><strong>Ruth Ron</strong><span>Lecturer, University of Miami School of Architecture</span></div>
+            <div class="team-member"><strong>Rafael Araujo</strong><span>Sr. Research Associate, University of Miami Rosenstiel School of Marine and Atmospheric Sciences</span></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Education Lead</h3>
+            <div class="team-member"><strong>Ren Mendoza</strong><span>Assistant Professor of STEM Education, University of Nebraska Omaha, College of Education, Health, and Human Sciences</span></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Development Leads</h3>
+            <div class="team-member"><strong>Bryson Rudolph</strong><span>Software Engineer, Frost Institute for Data Science and Computing</span></div>
+            <div class="team-member"><strong>Zeven Rodriguez</strong><span>Lecturer, Department of Interactive Media</span></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Project Managers</h3>
+            <div class="team-member"><strong>Sofia Perez-Baux</strong></div>
+            <div class="team-member"><strong>Rachael Farinas</strong></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Developers</h3>
+            <div class="team-member"><strong>Ashay Dave</strong><span>Graduate Student, University of Miami</span></div>
+            <div class="team-member"><strong>Sourav Pande</strong><span>Graduate Student, University of Miami</span></div>
+            <div class="team-member"><strong>Kumani Riley</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Bradley Karmin</strong><span>Student, Northeastern University</span></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Designers</h3>
+            <div class="team-member"><strong>Kim Grinfeder</strong><span>Professor, Department of Interactive Media</span></div>
+            <div class="team-member"><strong>Cassandra Swilley</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Whit Redgate</strong><span>Student, University of Miami</span></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Voiceovers</h3>
+            <div class="team-member"><strong>Andrea Miranda</strong></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Architecture Design</h3>
+            <div class="team-member"><strong>Ruth Ron</strong><span>Lecturer, University of Miami School of Architecture</span></div>
+            <div class="team-member"><strong>Daley Hall &amp; Sam Tsirulnikov</strong><span>Lilypad homes — Students, University of Miami</span></div>
+            <div class="team-member"><strong>Sean Festa &amp; Nicholas Amadori</strong><span>Beehives — Students, University of Miami</span></div>
+            <div class="team-member"><strong>Crispin Blamphin</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Ckiara Condezo</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Brianna Marie Frank</strong><span>Student, University of Miami</span></div>
+          </div>
+          <div class="team-group reveal">
+            <h3 class="team-category">Mangrove Scientists</h3>
+            <div class="team-member"><strong>Rafael Araujo</strong><span>Sr. Research Associate, Department of Marine Biology and Ecology</span></div>
+            <div class="team-member"><strong>Kellie Flowers</strong><span>Graduate Student, University of Miami</span></div>
+            <div class="team-member"><strong>Bailey Ross</strong><span>Graduate Student, University of Miami</span></div>
+            <div class="team-member"><strong>Olivia Howson</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Sana Lynch</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Dale Kline</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Maya Bhalla-Ladd</strong><span>Student, University of Miami</span></div>
+            <div class="team-member"><strong>Kandisi Anyabwile</strong><span>Student, University of Miami</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-logos">
+      <img src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/65651270bc950eda56bf9953_Logo-University-of-Miami%20(2).jpg" srcset="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/65651270bc950eda56bf9953_Logo-University-of-Miami%20(2)-p-500.jpg 500w" sizes="150px" alt="University of Miami Logo" loading="lazy" class="footer-logo-img" />
+      <img src="https://cdn.prod.website-files.com/653c0346ff50c4e87b53b271/656512e33f37e8eb9aa307f6_UNO_CEHHS.jpg" alt="University of Nebraska Omaha — CEHHS" loading="lazy" class="footer-logo-img" width="91" />
+    </div>
+    <p class="footer-contact">For more information contact Kim Grinfeder at <a href="mailto:grinfeder@miami.edu">grinfeder@miami.edu</a></p>
+    <p class="footer-copy">© <span id="year"></span> Mangrove City VR — University of Miami</p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
