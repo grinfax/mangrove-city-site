@@ -1,0 +1,19 @@
+<!-- 404.html for GitHub Pages SPA redirect -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>404 Not Found</title>
+    <meta http-equiv="refresh" content="0; url=/mangrove-city-site/" />
+    <script>
+      // If JS is enabled, redirect to the correct SPA route
+      var l = window.location;
+      var path = l.pathname.replace(/^\/mangrove-city-site/, "");
+      window.location.replace("/mangrove-city-site/" + "#" + path + l.search + l.hash);
+    </script>
+  </head>
+  <body>
+    <h1>404 Not Found</h1>
+    <p>Redirecting...</p>
+  </body>
+</html>
