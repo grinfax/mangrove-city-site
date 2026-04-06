@@ -1,0 +1,11 @@
+<svg width="272" height="88" viewBox="0 0 272 88" xmlns="http://www.w3.org/2000/svg">
+  <a href="https://www.meta.com/experiences/mangrove-city/7925110217603062/">
+    <rect width="272" height="88" rx="14" fill="#1e3a2f"/>
+    <g transform="translate(22, 26)">
+      <path d="M0 18 C0 11, 5 6, 10 6 C15 6, 18 10, 21 14 C23 18, 25 21, 26 23 C28 26, 31 29, 34 29 C39 29, 42 24, 42 18 C42 12, 39 6, 34 6 C31 6, 28 10, 26 13" fill="none" stroke="#5CCA8B" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M42 18 C42 24, 39 29, 34 29 C31 29, 28 26, 26 23 C25 21, 23 18, 21 14 C18 10, 15 6, 10 6 C5 6, 0 11, 0 18 C0 25, 5 29, 10 29 C15 29, 18 26, 21 21" fill="none" stroke="#5CCA8B" stroke-width="3.2" stroke-linecap="round"/>
+    </g>
+    <text x="76" y="36" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" letter-spacing="0.09em" fill="#7db99a">DOWNLOAD ON</text>
+    <text x="76" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="26" font-weight="500" fill="#e8f5ee">Meta Quest</text>
+  </a>
+</svg>
